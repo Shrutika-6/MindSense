@@ -27,3 +27,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pip-log.txt
+
+# MongoDB database files
+backend/ml_service/db/
+
+# ChromaDB folder
+backend/ml_service/chroma_db/
+

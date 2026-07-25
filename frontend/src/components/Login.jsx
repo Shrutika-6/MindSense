@@ -28,93 +28,53 @@ export default function Login() {
         alignItems: "center",
         justifyContent: "center",
         minHeight: "100vh",
-        backgroundColor: "#f3f4f6",
-        backgroundImage: "url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80')",
-        padding: "1rem",
+        padding: "1.5rem",
         width: "100vw",
         boxSizing: "border-box",
       }}
     >
-      <div
-        style={{
-          backgroundColor: "white",
-          borderRadius: "0.5rem",
-          boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-          width: "100%",
-          maxWidth: "600px",
-          padding: "2rem",
-          boxSizing: "border-box",
-        }}
-      >
-        <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
-          <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "0.5rem" }}>Login</h2>
-          <p style={{ color: "#6b7280", fontSize: "0.875rem" }}>Enter your credentials to access your account</p>
+      <div className="glass-card" style={{ width: "100%", maxWidth: "500px", padding: "3rem 2.5rem" }}>
+        <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+          <h2 style={{ fontSize: "2rem", fontWeight: "800", color: "#1e293b", marginBottom: "0.5rem" }}>Welcome Back</h2>
+          <p style={{ color: "#64748b", fontSize: "0.95rem", fontWeight: "500" }}>Login to your MindSense AI account</p>
         </div>
-        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-            <label htmlFor="email" style={{ fontSize: "0.875rem", fontWeight: "500" }}>
-              Email:
-            </label>
+        
+        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+          <div className="form-group">
+            <label htmlFor="email" className="form-label">Email Address</label>
             <input
               id="email"
               type="email"
               name="email"
               required
+              className="form-input"
               onChange={(e) => setEmail(e.target.value)}
-              style={{
-                padding: "0.625rem 0.75rem",
-                border: "1px solid #d1d5db",
-                borderRadius: "0.375rem",
-                width: "100%",
-                fontSize: "1rem",
-                lineHeight: "1.5rem",
-              }}
+              placeholder="name@domain.com"
             />
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-            <label htmlFor="password" style={{ fontSize: "0.875rem", fontWeight: "500" }}>
-              Password:
-            </label>
+
+          <div className="form-group">
+            <label htmlFor="password" className="form-label">Password</label>
             <input
               id="password"
               type="password"
               name="password"
               required
+              className="form-input"
               onChange={(e) => setPassword(e.target.value)}
-              style={{
-                padding: "0.625rem 0.75rem",
-                border: "1px solid #d1d5db",
-                borderRadius: "0.375rem",
-                width: "100%",
-                fontSize: "1rem",
-                lineHeight: "1.5rem",
-              }}
+              placeholder="••••••••"
             />
           </div>
-          <button
-            type="submit"
-            style={{
-              width: "100%",
-              padding: "0.75rem 1rem",
-              backgroundColor: "#1a73e8",
-              color: "white",
-              border: "none",
-              borderRadius: "0.375rem",
-              cursor: "pointer",
-              fontSize: "1rem",
-              fontWeight: "500",
-              transition: "background-color 0.2s ease-in-out",
-            }}
-            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#155bb5")}
-            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#1a73e8")}
-          >
-            Login
+
+          <button type="submit" className="btn-primary" style={{ width: "100%", marginTop: "1rem", padding: "1rem" }}>
+            Sign In
           </button>
         </form>
-        <div style={{ marginTop: "1.5rem", textAlign: "center" }}>
-          <p style={{ fontSize: "0.875rem", color: "#6b7280" }}>
+
+        <div style={{ marginTop: "2rem", textAlign: "center" }}>
+          <p style={{ fontSize: "0.95rem", color: "#64748b", fontWeight: "500" }}>
             Don’t have an account?{' '}
-            <Link to="/signup" style={{ textDecoration: "underline", color: "#1a73e8" }}>
+            <Link to="/signup" style={{ textDecoration: "underline", color: "#0d9488", fontWeight: "700" }}>
               Sign up here
             </Link>
           </p>
