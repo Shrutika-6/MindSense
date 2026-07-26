@@ -37,19 +37,26 @@ function App() {
         </nav>
       )}
 
-      <div className="w-full max-w-7xl mx-auto px-4 py-8 page-transition">
-        <Routes>
-          <Route path="/" element={<Signup />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/emotion-detection" element={<EmotionDetection />} />
-          <Route path="/insights" element={<MindfulExercises />} />
-          <Route path="/dashboard" element={<MoodDashboard />} />
-        </Routes>
-      </div>
+      {isAuthPage ? (
+        <div className="w-full min-h-screen">
+          <Routes>
+            <Route path="/" element={<Signup />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </div>
+      ) : (
+        <div className="w-full max-w-7xl mx-auto px-4 py-8 page-transition">
+          <Routes>
+            <Route path="/home" element={<Home />} />
+            <Route path="/emotion-detection" element={<EmotionDetection />} />
+            <Route path="/insights" element={<MindfulExercises />} />
+            <Route path="/dashboard" element={<MoodDashboard />} />
+          </Routes>
+        </div>
+      )}
     </div>
-  );
+  )
 }
 
 export default App;

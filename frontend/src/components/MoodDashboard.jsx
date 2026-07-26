@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 
 const emotionColors = {
@@ -83,6 +84,9 @@ function MoodDashboard() {
 
   return (
     <div className="w-full max-w-3xl mx-auto py-6 px-4 flex flex-col gap-6">
+      <Link to="/home" className="text-slate-500 hover:text-violet-600 font-bold text-sm transition flex items-center gap-1 self-start">
+        ← Back to Home
+      </Link>
       <h1 className="text-4xl font-extrabold bg-gradient-to-r from-violet-600 to-pink-500 bg-clip-text text-transparent text-center">
         Your Mood History 📊
       </h1>
