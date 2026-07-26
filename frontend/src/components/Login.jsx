@@ -6,8 +6,8 @@ const MindSenseLogo = ({ size = 48 }) => (
   <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#7c3aed"/>
-        <stop offset="100%" stopColor="#ec4899"/>
+        <stop offset="0%" stopColor="#4f46e5"/>
+        <stop offset="100%" stopColor="#10b981"/>
       </linearGradient>
     </defs>
     <rect width="100" height="100" rx="22" fill="url(#logoGrad)"/>
@@ -56,7 +56,7 @@ export default function Login() {
         <div className="flex items-center gap-3">
           <MindSenseLogo size={48} />
           <div>
-            <p className="text-3xl font-black bg-gradient-to-r from-violet-600 to-pink-500 bg-clip-text text-transparent leading-none">MindSense</p>
+            <p className="text-3xl font-black bg-gradient-to-r from-indigo-600 to-emerald-500 bg-clip-text text-transparent leading-none">MindSense</p>
             <p className="text-[10px] font-bold text-slate-500 tracking-wider uppercase mt-1">Your Wellness Companion</p>
           </div>
         </div>
@@ -64,7 +64,7 @@ export default function Login() {
         {/* Heading */}
         <h1 className="text-4xl lg:text-5xl font-black text-slate-800 leading-tight">
           Your mind<br/>
-          <span className="bg-gradient-to-r from-violet-600 via-pink-500 to-amber-400 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-indigo-600 via-teal-500 to-emerald-400 bg-clip-text text-transparent">
             deserves care
           </span><br/>
           every day.
@@ -102,14 +102,14 @@ export default function Login() {
             { value: "24/7", label: "Crisis support" },
           ].map((stat, i) => (
             <div key={i} className="flex-1 bg-white/50 backdrop-blur border border-white/70 rounded-xl py-2 text-center shadow-sm">
-              <p className="text-xl font-black bg-gradient-to-r from-violet-600 to-pink-500 bg-clip-text text-transparent">{stat.value}</p>
+              <p className="text-xl font-black bg-gradient-to-r from-indigo-600 to-emerald-500 bg-clip-text text-transparent">{stat.value}</p>
               <p className="text-slate-500 text-[10px] font-bold uppercase">{stat.label}</p>
             </div>
           ))}
         </div>
 
         {/* Quote */}
-        <div className="border-l-4 border-violet-300 pl-4">
+        <div className="border-l-4 border-emerald-300 pl-4">
           <p className="text-slate-600 text-xs font-semibold italic leading-relaxed">
             "Taking care of your mental health is one of the most important things you can do — for yourself and for the people you love."
           </p>
@@ -121,10 +121,10 @@ export default function Login() {
         <div className="relative w-full max-w-md">
 
           {/* Glow */}
-          <div className="absolute -inset-1 bg-gradient-to-r from-violet-400 via-pink-400 to-amber-300 rounded-[36px] blur-xl opacity-20 pointer-events-none" />
+          <div className="absolute -inset-1 bg-gradient-to-r from-indigo-400 via-teal-400 to-emerald-300 rounded-[36px] blur-xl opacity-20 pointer-events-none" />
 
           {/* Card */}
-          <div className="relative bg-white/70 backdrop-blur-2xl border border-white/80 rounded-[32px] px-10 py-8 shadow-[0_20px_60px_rgba(139,92,246,0.1)]">
+          <div className="relative bg-white/70 backdrop-blur-2xl border border-white/80 rounded-[32px] px-10 py-8 shadow-[0_20px_60px_rgba(13,148,136,0.08)]">
 
             <div className="mb-6">
               <h2 className="text-2xl font-extrabold text-slate-800 mb-1">Welcome back</h2>
@@ -145,7 +145,7 @@ export default function Login() {
                       required
                       placeholder={field.placeholder}
                       onChange={(e) => field.setter(e.target.value)}
-                      className="w-full pl-11 pr-4 py-3 bg-white/80 border border-slate-200/80 rounded-2xl text-slate-700 text-sm font-medium placeholder:text-slate-300 focus:outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-200 transition-all duration-200"
+                      className="w-full pl-11 pr-4 py-3 bg-white/80 border border-slate-200/80 rounded-2xl text-slate-700 text-sm font-medium placeholder:text-slate-300 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-200"
                     />
                   </div>
                 </div>
@@ -154,7 +154,7 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full mt-2 py-3.5 rounded-2xl font-extrabold text-white text-sm tracking-wide bg-gradient-to-r from-violet-500 via-pink-500 to-amber-400 shadow-[0_6px_15px_rgba(139,92,246,0.25)] hover:shadow-[0_10px_24px_rgba(139,92,246,0.35)] hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full mt-2 py-3.5 rounded-2xl font-extrabold text-white text-sm tracking-wide bg-gradient-to-r from-indigo-600 via-teal-500 to-emerald-400 shadow-[0_6px_15px_rgba(13,148,136,0.25)] hover:shadow-[0_10px_24px_rgba(13,148,136,0.35)] hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {loading ? "Signing you in..." : "✨ Sign In"}
               </button>
@@ -168,7 +168,7 @@ export default function Login() {
 
             <p className="text-center text-slate-500 text-xs font-semibold">
               Don't have an account?{" "}
-              <Link to="/signup" className="font-extrabold bg-gradient-to-r from-violet-600 to-pink-500 bg-clip-text text-transparent hover:opacity-80 transition">
+              <Link to="/signup" className="font-extrabold bg-gradient-to-r from-indigo-600 to-emerald-500 bg-clip-text text-transparent hover:opacity-80 transition">
                 Sign up here →
               </Link>
             </p>

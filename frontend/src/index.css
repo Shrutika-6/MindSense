@@ -40,7 +40,7 @@ body {
   height: 100%;
   z-index: -10;
   overflow: hidden;
-  background: linear-gradient(180deg, #f5f3ff 0%, #fdf2f8 50%, #f0fdf4 100%);
+  background: linear-gradient(180deg, #e8f5e9 0%, #e0f2fe 50%, #e0f7fa 100%);
 }
 
 .lava-blob {
@@ -53,7 +53,7 @@ body {
 }
 
 .blob-lavender {
-  background: #e9d5ff;
+  background: #a3cfbb; /* Richer Sage Green */
   width: 55vw;
   height: 55vw;
   top: -10%;
@@ -62,7 +62,7 @@ body {
 }
 
 .blob-pink {
-  background: #fbcfe8;
+  background: #9ec5fe; /* Richer Sky Blue */
   width: 50vw;
   height: 50vw;
   bottom: -10%;
@@ -71,7 +71,7 @@ body {
 }
 
 .blob-mint {
-  background: #a7f3d0;
+  background: #99f6e4; /* Richer Mint Green */
   width: 45vw;
   height: 45vw;
   top: 30%;
@@ -80,7 +80,7 @@ body {
 }
 
 .blob-peach {
-  background: #fed7aa;
+  background: #aedeb3; /* Richer Leaf Green */
   width: 40vw;
   height: 40vw;
   bottom: 20%;
@@ -127,7 +127,7 @@ body {
   position: relative;
   border-radius: 50%;
   padding: 8px;
-  background: linear-gradient(90deg, #c084fc, #f472b6, #fb923c, #34d399, #60a5fa, #c084fc);
+  background: linear-gradient(90deg, #0d9488, #2dd4bf, #34d399, #38bdf8, #4f46e5, #0d9488);
   background-size: 400% 400%;
   animation: rotate-gradient 8s linear infinite, soft-pulse 4s ease-in-out infinite alternate;
 }
@@ -139,8 +139,8 @@ body {
 }
 
 @keyframes soft-pulse {
-  0% { transform: scale(0.98); box-shadow: 0 0 15px rgba(244, 114, 182, 0.2); }
-  100% { transform: scale(1.02); box-shadow: 0 0 35px rgba(192, 132, 252, 0.4); }
+  0% { transform: scale(0.98); box-shadow: 0 0 15px rgba(45, 212, 191, 0.25); }
+  100% { transform: scale(1.02); box-shadow: 0 0 35px rgba(20, 184, 166, 0.45); }
 }
 
 /* Typing indicator dots */
@@ -170,3 +170,46 @@ body {
     transform: translateY(0);
   }
 }
+
+/* Shake animation for Jar */
+.animate-shake {
+  animation: shake-jar 0.5s ease-in-out infinite;
+}
+
+@keyframes shake-jar {
+  0%, 100% { transform: rotate(0deg) translateX(0); }
+  20%, 60% { transform: rotate(-5deg) translateX(-4px); }
+  40%, 80% { transform: rotate(5deg) translateX(4px); }
+}
+
+/* Fade-in for drawn memory */
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out forwards;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translate(-50%, 10px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* Fade-in for Modal Overlay */
+.animate-modal-fade {
+  animation: modal-fade 0.25s ease-out forwards;
+}
+
+@keyframes modal-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Scale up for Modal Card */
+.animate-scale-up {
+  animation: scale-up 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes scale-up {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+

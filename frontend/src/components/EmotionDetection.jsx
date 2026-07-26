@@ -205,10 +205,10 @@ function EmotionDetection() {
 
   return (
     <div className="w-full flex flex-col items-center py-6 px-4">
-      <div className="absolute top-10 left-[10%] text-pink-300/40 text-xl animate-pulse">✦</div>
-      <div className="absolute top-[40%] right-[10%] text-purple-300/40 text-2xl animate-bounce">✧</div>
+      <div className="absolute top-10 left-[10%] text-teal-300/40 text-xl animate-pulse">✦</div>
+      <div className="absolute top-[40%] right-[10%] text-indigo-300/40 text-2xl animate-bounce">✧</div>
 
-      <h1 className="text-4xl font-extrabold bg-gradient-to-r from-violet-600 to-pink-500 bg-clip-text text-transparent mb-8">
+      <h1 className="text-4xl font-extrabold bg-gradient-to-r from-indigo-600 to-emerald-500 bg-clip-text text-transparent mb-8">
         MindSense Scan
       </h1>
 
@@ -228,12 +228,12 @@ function EmotionDetection() {
         )}
 
         {hasStarted && (
-          <div className="w-full bg-white/60 backdrop-blur-xl border border-white/80 rounded-[28px] p-8 shadow-[0_15px_35px_rgba(244,114,182,0.08)]">
+          <div className="w-full bg-white/60 backdrop-blur-xl border border-white/80 rounded-[28px] p-8 shadow-[0_15px_35px_rgba(13,148,136,0.05)]">
             {isDetecting ? (
               <div className="text-center">
                 <p className="text-slate-500 font-bold uppercase tracking-wider text-xs mb-1">Analyzing expression</p>
                 <h3 className="text-2xl font-extrabold text-slate-800 mb-4 capitalize">
-                  Current: <span className="text-violet-600">{currentEmotion}</span>
+                  Current: <span className="text-indigo-600">{currentEmotion}</span>
                 </h3>
                 <DetectionStatus emotionCounts={emotionCounts} detectionTime={detectionTime} />
               </div>
@@ -259,8 +259,8 @@ function EmotionDetection() {
                           {!msg.isCrisis && (
                             <div className={`max-w-[80%] rounded-[20px] px-5 py-3 text-sm font-semibold shadow-sm leading-relaxed ${
                               msg.sender === "user"
-                                ? "bg-gradient-to-r from-violet-400 to-pink-400 text-white rounded-br-none"
-                                : "bg-white/80 text-slate-700 rounded-bl-none border-l-4 border-pink-400"
+                                ? "bg-gradient-to-r from-indigo-500 to-teal-500 text-white rounded-br-none"
+                                : "bg-white/80 text-slate-700 rounded-bl-none border-l-4 border-teal-400"
                             }`}>
                               {msg.text}
                             </div>
@@ -270,10 +270,10 @@ function EmotionDetection() {
 
                       {isTyping && (
                         <div className="flex justify-start">
-                          <div className="bg-white/80 rounded-[20px] px-5 py-3 rounded-bl-none border-l-4 border-pink-400 flex items-center gap-1">
-                            <span className="w-2.5 h-2.5 rounded-full bg-pink-400/50 typing-dot"></span>
-                            <span className="w-2.5 h-2.5 rounded-full bg-violet-400/50 typing-dot"></span>
-                            <span className="w-2.5 h-2.5 rounded-full bg-amber-400/50 typing-dot"></span>
+                          <div className="bg-white/80 rounded-[20px] px-5 py-3 rounded-bl-none border-l-4 border-teal-400 flex items-center gap-1">
+                            <span className="w-2.5 h-2.5 rounded-full bg-teal-400/50 typing-dot"></span>
+                            <span className="w-2.5 h-2.5 rounded-full bg-indigo-400/50 typing-dot"></span>
+                            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400/50 typing-dot"></span>
                           </div>
                         </div>
                       )}
@@ -285,11 +285,11 @@ function EmotionDetection() {
                         value={chatInput}
                         onChange={(e) => setChatInput(e.target.value)}
                         placeholder="Talk to MindSense AI..."
-                        className="flex-1 px-4 py-3 bg-white/90 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:border-violet-400 text-slate-700"
+                        className="flex-1 px-4 py-3 bg-white/90 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:border-indigo-400 text-slate-700"
                       />
                       <button
                         type="submit"
-                        className="bg-violet-600 hover:bg-violet-700 text-white font-bold px-5 py-3 rounded-xl text-sm transition"
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-3 rounded-xl text-sm transition"
                       >
                         Send
                       </button>

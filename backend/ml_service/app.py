@@ -10,7 +10,7 @@ from PIL import Image
 from pymongo import MongoClient
 from datetime import datetime
 from agent import run_agent
-from emotion_history import get_recent_emotions
+from emotion_history import get_recent_emotions, log_memory, get_memories, get_random_memory
 import os
 
 app = Flask(__name__)
@@ -90,6 +90,78 @@ def get_history():
         print("History error:", e)
         return jsonify({"history": []}), 200
 
+@app.route("/memories", methods=["POST"])
+def post_memory():
+    data = request.get_json()
+    user_id = data.get("user_id", "anonymous")
+    text = data.get("text", "").strip()
+    if not text:
+        return jsonify({"error": "Missing memory text"}), 400
+        
+    api_key = os.environ.get("GROQ_API_KEY")
+    if api_key:
+        try:
+            from groq import Groq
+            groq_client = Groq(api_key=api_key)
+            classification = groq_client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                messages=[
+                    {
+                        "role": "system",
+                        "content": """You are a sentiment filter for a Self-Compassion Jar. 
+The jar must ONLY hold positive, happy, or gratitude-filled memories (accomplishments, compliments, moments of peace, things that made the user smile).
+It must NOT contain neutral, empty, flat, sad, critical, depressing, sick, or anxious statements (such as: 'i am not feeling anything', 'nothing', 'i am not feeling well', 'i failed', 'i feel down').
+Analyze the text and respond with exactly one word: 'POSITIVE' or 'NEGATIVE'."""
+                    },
+                    {
+                        "role": "user",
+                        "content": text
+                    }
+                ]
+            )
+            sentiment = classification.choices[0].message.content.strip().upper()
+            print(f"Memory classification: {sentiment} for text: {text}")
+            if "NEGATIVE" in sentiment:
+                return jsonify({
+                    "is_positive": False,
+                    "message": "It sounds like you're having a tough moment. The Self-Compassion Jar is reserved for happy/gratitude memories to lift you up later. Consider talking to the MindSense Companion about this instead!"
+                }), 200
+        except Exception as e:
+            print("Groq sentiment check error:", e)
+
+    try:
+        log_memory(user_id, text)
+        return jsonify({
+            "is_positive": True,
+            "message": "Memory saved successfully!"
+        })
+    except Exception as e:
+        print("Save memory error:", e)
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/memories", methods=["GET"])
+def fetch_memories():
+    user_id = request.args.get("user_id", "anonymous")
+    try:
+        records = get_memories(user_id)
+        return jsonify({"memories": records})
+    except Exception as e:
+        print("Fetch memories error:", e)
+        return jsonify({"memories": []}), 200
+
+@app.route("/memories/random", methods=["GET"])
+def fetch_random_memory():
+    user_id = request.args.get("user_id", "anonymous")
+    try:
+        record = get_random_memory(user_id)
+        if not record:
+            return jsonify({"memory": None})
+        return jsonify({"memory": record})
+    except Exception as e:
+        print("Fetch random memory error:", e)
+        return jsonify({"memory": None}), 200
+
+
 if __name__ == "__main__":
     app.run(debug=True)
-    

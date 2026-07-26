@@ -28,3 +28,29 @@ def check_repeated_negative(user_id, emotion, days=3):
     negative_emotions = ["sad", "angry", "fear", "disgust"]
     negative_count = sum(1 for r in records if r["emotion"] in negative_emotions)
     return negative_count >= 3
+
+
+# --------------------------
+# Self-Compassion Jar Helpers
+# --------------------------
+memories_collection = db["memories"]
+
+def log_memory(user_id, text):
+    record = {
+        "user_id": user_id,
+        "text": text,
+        "timestamp": datetime.utcnow()
+    }
+    memories_collection.insert_one(record)
+    print(f"Logged memory for user {user_id}")
+
+def get_memories(user_id):
+    return list(memories_collection.find({"user_id": user_id}, {"_id": 0, "text": 1, "timestamp": 1}))
+
+def get_random_memory(user_id):
+    import random
+    memories = get_memories(user_id)
+    if not memories:
+        return None
+    return random.choice(memories)
+
