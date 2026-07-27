@@ -8,6 +8,7 @@ import { useNavigate, Link } from "react-router-dom";
 function EmotionDetection() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const chatEndRef = useRef(null);
 
   const [currentEmotion, setCurrentEmotion] = useState("Detecting...");
   const [stableEmotion, setStableEmotion] = useState(null);
@@ -82,6 +83,12 @@ function EmotionDetection() {
       if (interval) clearInterval(interval);
     };
   }, [isDetecting]);
+
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [chatMessages, isTyping]);
 
   const captureAndSendFrame = () => {
     const video = videoRef.current;
@@ -425,6 +432,8 @@ function EmotionDetection() {
                         </div>
                       </div>
                     )}
+                    {/* Anchor ref for auto-scrolling */}
+                    <div ref={chatEndRef} />
                   </div>
 
                   {/* Message Input form */}
