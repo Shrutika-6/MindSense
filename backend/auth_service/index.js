@@ -53,6 +53,10 @@ app.get('/verify', (req, res) => {
 
 // Signup user creation endpoint
 app.post('/user', (req, res) => {
+  const { password } = req.body;
+  if (!password || password.length < 8) {
+    return res.status(400).json({ error: "Password must be at least 8 characters long" });
+  }
   EmotionModel.create(req.body)
     .then(emotionDB => res.json(emotionDB))
     .catch(err => res.json(err));

@@ -12,6 +12,10 @@ function Signup() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    if (password.length < 8) {
+      alert("Security Requirement: Password must be at least 8 characters long.")
+      return
+    }
     setLoading(true)
     axios
       .post("http://localhost:3001/user", { name, email, password })
