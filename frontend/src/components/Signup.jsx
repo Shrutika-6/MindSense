@@ -8,14 +8,24 @@ function Signup() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
   const navigate = useNavigate()
+
+  const handlePasswordChange = (val) => {
+    setPassword(val)
+    if (val.length >= 8) {
+      setError("")
+    }
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
     if (password.length < 8) {
-      alert("Security Requirement: Password must be at least 8 characters long.")
+      setError("Password must be at least 8 characters long.")
+      setLoading(false)
       return
     }
+    setError("")
     setLoading(true)
     axios
       .post("http://localhost:3001/user", { name, email, password })
@@ -115,7 +125,7 @@ function Signup() {
               {[
                 { label: "Full Name", type: "text", placeholder: "Your name", emoji: "👤", setter: setName },
                 { label: "Email Address", type: "email", placeholder: "name@domain.com", emoji: "✉️", setter: setEmail },
-                { label: "Password", type: "password", placeholder: "••••••••", emoji: "🔒", setter: setPassword },
+                { label: "Password", type: "password", placeholder: "••••••••", emoji: "🔒", setter: handlePasswordChange },
               ].map((field, i) => (
                 <div key={i} className="flex flex-col gap-1.5">
                   <label className="text-slate-500 text-[10px] font-bold uppercase tracking-wider pl-1">{field.label}</label>
@@ -129,6 +139,11 @@ function Signup() {
                       className="w-full pl-11 pr-4 py-3 bg-white/80 border border-slate-200/80 rounded-2xl text-slate-700 text-sm font-medium placeholder:text-slate-300 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition-all duration-200"
                     />
                   </div>
+                  {field.label === "Password" && error && (
+                    <p className="text-red-500 text-[10.5px] font-bold mt-1 pl-1.5 animate-pulse flex items-center gap-1">
+                      <span>⚠️</span> <span>{error}</span>
+                    </p>
+                  )}
                 </div>
               ))}
 
