@@ -8,9 +8,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const JWT_SECRET = "mindsense_super_secret_key_2026_token";
+const JWT_SECRET = process.env.JWT_SECRET || "mindsense_super_secret_key_2026_token";
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/emotionDB";
 
-mongoose.connect("mongodb://127.0.0.1:27017/emotionDB"); 
+mongoose.connect(MONGODB_URI); 
 
 // User login endpoint generating a signed JWT token
 app.post('/login', (req, res) => {
@@ -62,6 +63,7 @@ app.post('/user', (req, res) => {
     .catch(err => res.json(err));
 });
 
-app.listen(3001, () => {
-  console.log('Server is running' );
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });

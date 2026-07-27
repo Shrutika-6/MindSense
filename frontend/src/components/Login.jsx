@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
 import axios from "axios"
 import MindSenseLogo from "./MindSenseLogo"
+import { AUTH_API_URL } from "../config"
 
 export default function Login() {
   const [email, setEmail] = useState("")
@@ -12,7 +13,7 @@ export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault()
     setLoading(true)
-    axios.post("http://localhost:3001/login", { email, password })
+    axios.post(`${AUTH_API_URL}/login`, { email, password })
       .then(result => {
         console.log(result)
         const data = result.data;

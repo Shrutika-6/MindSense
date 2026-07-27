@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Link, useLocation, Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { AUTH_API_URL } from "./config";
 import "./App.css";
 
 import Signup from "./components/Signup";
@@ -33,7 +34,7 @@ function App() {
     }
 
     // Verify token validity with Express auth_service backend
-    axios.get("http://localhost:3001/verify", {
+    axios.get(`${AUTH_API_URL}/verify`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then((res) => {

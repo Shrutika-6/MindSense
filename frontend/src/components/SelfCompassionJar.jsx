@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
+import { ML_API_URL } from "../config"
 
 export default function SelfCompassionJar() {
   const [memories, setMemories] = useState([])
@@ -20,7 +21,7 @@ export default function SelfCompassionJar() {
   }, [])
 
   const fetchMemories = () => {
-    fetch(`http://127.0.0.1:5000/memories?user_id=${userId}`)
+    fetch(`${ML_API_URL}/memories?user_id=${userId}`)
       .then((res) => res.json())
       .then((data) => {
         setMemories(data.memories || [])
@@ -34,7 +35,7 @@ export default function SelfCompassionJar() {
     if (!newMemory.trim() || submitting) return
 
     setSubmitting(true)
-    fetch("http://127.0.0.1:5000/memories", {
+    fetch(`${ML_API_URL}/memories`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ user_id: userId, text: newMemory })
@@ -61,7 +62,7 @@ export default function SelfCompassionJar() {
 
     // Shake animation for 1.2 seconds, then retrieve random memory
     setTimeout(() => {
-      fetch(`http://127.0.0.1:5000/memories/random?user_id=${userId}`)
+      fetch(`${ML_API_URL}/memories/random?user_id=${userId}`)
         .then((res) => res.json())
         .then((data) => {
           setShaking(false)

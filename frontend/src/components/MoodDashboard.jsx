@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
+import { ML_API_URL } from "../config";
 
 const emotionColors = {
   happy: "#fbbf24",
@@ -27,7 +28,7 @@ function MoodDashboard() {
   const userId = localStorage.getItem("userEmail") || "anonymous";
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:5000/history?user_id=${userId}&days=7`)
+    fetch(`${ML_API_URL}/history?user_id=${userId}&days=7`)
       .then((res) => res.json())
       .then((data) => {
         setHistory(data.history || []);
@@ -58,7 +59,7 @@ function MoodDashboard() {
       .map((d) => `${d.emotion}: ${d.count} times`)
       .join(", ");
 
-    fetch("http://127.0.0.1:5000/chat", {
+    fetch(`${ML_API_URL}/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

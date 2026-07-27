@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import MindSenseLogo from "./MindSenseLogo"
+import { ML_API_URL } from "../config"
 
 const WELLNESS_QUOTES = [
   { text: "You don't have to control your thoughts. You just have to stop letting them control you.", author: "Dan Millman" },
@@ -25,7 +26,7 @@ export default function Home() {
   const [latestCheckin, setLatestCheckin] = useState(null)
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:5000/history/latest?user_id=${userEmail}`)
+    fetch(`${ML_API_URL}/history/latest?user_id=${userEmail}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.latest) {

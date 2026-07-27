@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
 import axios from "axios"
 import MindSenseLogo from "./MindSenseLogo"
+import { AUTH_API_URL } from "../config"
 
 function Signup() {
   const [name, setName] = useState("")
@@ -28,7 +29,7 @@ function Signup() {
     setError("")
     setLoading(true)
     axios
-      .post("http://localhost:3001/user", { name, email, password })
+      .post(`${AUTH_API_URL}/user`, { name, email, password })
       .then((result) => {
         navigate("/login")
         console.log(result)

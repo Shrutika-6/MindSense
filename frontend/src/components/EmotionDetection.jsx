@@ -4,6 +4,7 @@ import DetectionStatus from "./DetectionStatus";
 import StartButton from "./StartButton";
 import ResultSection from "./ResultSection";
 import { useNavigate, Link } from "react-router-dom";
+import { ML_API_URL } from "../config";
 
 const AFFIRMATIONS = [
   "I am in control of my reactions, and I choose peace.",
@@ -108,8 +109,8 @@ function EmotionDetection() {
   useEffect(() => {
     if (!hasStarted) {
       Promise.all([
-        fetch(`http://127.0.0.1:5000/history?user_id=${userId}&days=7`).then(res => res.json()),
-        fetch(`http://127.0.0.1:5000/history/latest?user_id=${userId}`).then(res => res.json())
+        fetch(`${ML_API_URL}/history?user_id=${userId}&days=7`).then(res => res.json()),
+        fetch(`${ML_API_URL}/history/latest?user_id=${userId}`).then(res => res.json())
       ])
         .then(([historyData, latestData]) => {
           setStats({
@@ -128,7 +129,7 @@ function EmotionDetection() {
     const context = canvas.getContext("2d");
     context.drawImage(video, 0, 0, 300, 300);
     const imageData = canvas.toDataURL("image/jpeg");
-    fetch("http://127.0.0.1:5000/predict", {
+    fetch(`${ML_API_URL}/predict`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ image: imageData }),
@@ -167,7 +168,7 @@ function EmotionDetection() {
     setCurrentEmotion(maxEmotion);
 
     // Auto-log emotion scan to history database
-    fetch("http://127.0.0.1:5000/history", {
+    fetch(`${ML_API_URL}/history`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -224,7 +225,7 @@ function EmotionDetection() {
     setChatMessages((prev) => [...prev, { sender: "user", text: userMsg, isCrisis: false }]);
     setIsTyping(true);
 
-    fetch("http://127.0.0.1:5000/chat", {
+    fetch(`${ML_API_URL}/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
