@@ -226,17 +226,35 @@ function EmotionDetection() {
       </h1>
 
       <div className="w-full max-w-2xl flex flex-col items-center">
-        <div className="flex justify-center mb-6">
-          <div className={`${isDetecting ? "breathing-border" : "border-4 border-white/90 rounded-full"} p-2 transition-all duration-500`}>
-            <div className="w-48 h-48 rounded-full overflow-hidden bg-slate-200 border-2 border-white/80 shadow-md">
+        <div className="flex justify-center mb-8 relative">
+          <div className={`${isDetecting ? "breathing-border" : "border-4 border-white/90 rounded-full"} p-2.5 transition-all duration-500`}>
+            <div className="w-72 h-72 rounded-full overflow-hidden bg-slate-100 border-2 border-white/80 shadow-lg relative">
               <EmotionVideo videoRef={videoRef} canvasRef={canvasRef} />
+              
+              {/* Glowing scanning laser sweeper (visible only when active) */}
+              {isDetecting && (
+                <>
+                  {/* Sweeping Laser Beam Line */}
+                  <div className="absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_8px_#2dd4bf] z-10 animate-scan pointer-events-none" />
+                  
+                  {/* Circular target reticle ring */}
+                  <div className="absolute inset-0 border border-teal-400/25 rounded-full pointer-events-none z-10 animate-pulse" />
+                  
+                  {/* Scope Crosshair Ticks */}
+                  <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-[1.5px] border-l border-dashed border-teal-400/20 z-10 pointer-events-none" />
+                  <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[1.5px] border-t border-dashed border-teal-400/20 z-10 pointer-events-none" />
+                </>
+              )}
             </div>
           </div>
         </div>
 
         {!hasStarted && (
-          <div className="mt-4">
+          <div className="mt-2 flex flex-col items-center gap-4">
             <StartButton onClick={handleStartDetection} />
+            <p className="text-slate-400 text-[10px] font-bold uppercase tracking-wider text-center mt-2">
+              💡 Tip: Ensure your face is centered and well-lit
+            </p>
           </div>
         )}
 

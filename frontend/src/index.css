@@ -238,8 +238,24 @@ body {
 }
 
 @keyframes scan-line {
-  0%, 100% { top: 12%; opacity: 0.3; }
-  50% { top: 78%; opacity: 1; }
+  0%, 100% { top: 5%; opacity: 0.3; }
+  50% { top: 95%; opacity: 1; }
+}
+
+/* Webcam Video styling */
+.video-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.video-element {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1); /* Mirror preview */
 }
 
 
