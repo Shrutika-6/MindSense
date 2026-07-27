@@ -1,5 +1,5 @@
-import React from "react";
-import { Routes, Route, Link, useLocation, Navigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Routes, Route, Link, useLocation, Navigate, useNavigate } from "react-router-dom";
 import "./App.css";
 
 import Signup from "./components/Signup";
@@ -14,7 +14,10 @@ import MindSenseLogo from "./components/MindSenseLogo";
 
 function App() {
   const location = useLocation();
+  const navigate = useNavigate();
   const isAuthenticated = !!localStorage.getItem("userEmail");
+
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   // Determine if the current route is one of the auth pages
   const isAuthPage = ["/", "/signup", "/login"].includes(location.pathname);
@@ -53,14 +56,13 @@ function App() {
             <Link to="/journal" className="text-slate-600 hover:text-indigo-600 font-bold transition text-sm">Journal</Link>
             <Link to="/jar" className="text-slate-600 hover:text-indigo-600 font-bold transition text-sm">Joy Jar</Link>
             <Link to="/dashboard" className="text-slate-600 hover:text-indigo-600 font-bold transition text-sm">Mood History</Link>
-            {/* Clear user session upon click */}
-            <Link 
-              to="/login" 
-              onClick={() => localStorage.removeItem("userEmail")} 
-              className="text-slate-500 hover:text-red-500 font-semibold transition text-sm"
+            {/* Click triggers confirmation overlay modal */}
+            <button 
+              onClick={() => setShowLogoutConfirm(true)} 
+              className="text-slate-500 hover:text-red-500 font-semibold transition text-sm cursor-pointer bg-transparent border-none outline-none"
             >
               Logout
-            </Link>
+            </button>
           </div>
         </nav>
       )}
@@ -85,6 +87,39 @@ function App() {
             {/* Catch-all redirect to home */}
             <Route path="*" element={<Navigate to="/home" replace />} />
           </Routes>
+        </div>
+      )}
+
+      {/* Custom Logout Confirmation Modal */}
+      {showLogoutConfirm && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-modal-fade">
+          <div className="bg-white/90 backdrop-blur-xl border border-white/80 rounded-[32px] p-6 max-w-sm w-full shadow-2xl animate-scale-up text-center flex flex-col gap-4">
+            <div className="text-4xl mb-1">🚪</div>
+            <div>
+              <h3 className="text-lg font-black text-slate-800 leading-tight">Log Out</h3>
+              <p className="text-slate-500 text-xs font-semibold mt-2 leading-relaxed">
+                Are you sure you want to end your wellness session today? Your mood analytics and reflections are safe.
+              </p>
+            </div>
+            <div className="flex gap-3 mt-2">
+              <button
+                onClick={() => setShowLogoutConfirm(false)}
+                className="flex-1 py-3 rounded-2xl border border-slate-200 text-slate-600 font-extrabold text-xs uppercase tracking-wider hover:bg-slate-50 transition cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  setShowLogoutConfirm(false);
+                  localStorage.removeItem("userEmail");
+                  navigate("/login");
+                }}
+                className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-rose-500 to-red-600 text-white font-extrabold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition cursor-pointer"
+              >
+                Log Out
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
