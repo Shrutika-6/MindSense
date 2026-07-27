@@ -9,6 +9,8 @@ export default function SelfCompassionJar() {
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [errorModal, setErrorModal] = useState(null)
+  const [bubbleFloating, setBubbleFloating] = useState(false)
+  const [revealMemoryCard, setRevealMemoryCard] = useState(false)
   const navigate = useNavigate()
 
   const userId = localStorage.getItem("userEmail") || "anonymous"
@@ -54,6 +56,8 @@ export default function SelfCompassionJar() {
     if (memories.length === 0) return
     setShaking(true)
     setDrawnMemory(null)
+    setBubbleFloating(false)
+    setRevealMemoryCard(false)
 
     // Shake animation for 1.2 seconds, then retrieve random memory
     setTimeout(() => {
@@ -62,6 +66,14 @@ export default function SelfCompassionJar() {
         .then((data) => {
           setShaking(false)
           setDrawnMemory(data.memory)
+          if (data.memory) {
+            setBubbleFloating(true)
+            // Wait 1.8s for bubble to float up, then pop and reveal the text card
+            setTimeout(() => {
+              setBubbleFloating(false)
+              setRevealMemoryCard(true)
+            }, 1800)
+          }
         })
         .catch(() => setShaking(false))
     }, 1200)
@@ -140,8 +152,13 @@ export default function SelfCompassionJar() {
                 )}
               </div>
 
+              {/* Glowing floating memory bubble (rising out of the jar neck during draw) */}
+              {bubbleFloating && (
+                <div className="absolute top-[30px] left-[106px] w-12 h-12 rounded-full bg-gradient-to-tr from-yellow-300/60 via-amber-400/50 to-pink-300/30 border border-white/80 shadow-[0_0_25px_rgba(245,158,11,0.85)] z-30 animate-bubble-float pointer-events-none" />
+              )}
+
               {/* Open Drawn Memory Bubble (Centered overlay inside the jar itself!) */}
-              {drawnMemory && (
+              {drawnMemory && revealMemoryCard && (
                 <div className="absolute top-[48px] left-[5px] right-[5px] bottom-[5px] bg-slate-900/80 backdrop-blur-sm z-20 flex flex-col items-center justify-center p-6 text-center animate-modal-fade rounded-[48px]">
                   <span className="text-3xl mb-2 animate-bounce">🔮</span>
                   <p className="text-amber-300 text-[10px] font-extrabold uppercase tracking-wider mb-1">Drawn Memory</p>
@@ -149,7 +166,10 @@ export default function SelfCompassionJar() {
                     "{drawnMemory.text}"
                   </p>
                   <button 
-                    onClick={() => setDrawnMemory(null)}
+                    onClick={() => {
+                      setDrawnMemory(null);
+                      setRevealMemoryCard(false);
+                    }}
                     className="mt-4 bg-white/20 hover:bg-white/30 text-white font-extrabold text-[10px] uppercase px-4 py-1.5 rounded-full border border-white/40 transition cursor-pointer"
                   >
                     Close
