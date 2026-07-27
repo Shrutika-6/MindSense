@@ -128,6 +128,19 @@ function EmotionDetection() {
     setStableEmotion(maxEmotion);
     setCurrentEmotion(maxEmotion);
 
+    // Auto-log emotion scan to history database
+    fetch("http://127.0.0.1:5000/history", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        user_id: userId,
+        emotion: maxEmotion
+      })
+    })
+      .then((res) => res.json())
+      .then((data) => console.log("Auto-logged check-in:", data))
+      .catch((err) => console.error("Auto-log check-in failed:", err));
+
     const greetings = {
       happy: "I notice a bright smile on your face! That's wonderful. What's bringing you joy today?",
       sad: "I see a touch of sadness in your expression. I'm here to listen. How are you holding up?",

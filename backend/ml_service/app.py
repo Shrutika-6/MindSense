@@ -10,7 +10,7 @@ from PIL import Image
 from pymongo import MongoClient
 from datetime import datetime
 from agent import run_agent
-from emotion_history import get_recent_emotions, log_memory, get_memories, get_random_memory
+from emotion_history import get_recent_emotions, log_memory, get_memories, get_random_memory, log_emotion
 import os
 
 app = Flask(__name__)
@@ -89,6 +89,38 @@ def get_history():
     except Exception as e:
         print("History error:", e)
         return jsonify({"history": []}), 200
+
+@app.route("/history", methods=["POST"])
+def add_history():
+    data = request.get_json()
+    user_id = data.get("user_id", "anonymous")
+    emotion = data.get("emotion", "neutral")
+    try:
+        log_emotion(user_id, emotion)
+        return jsonify({"message": "Emotion logged successfully", "success": True})
+    except Exception as e:
+        print("Log history error:", e)
+        return jsonify({"error": str(e), "success": False}), 500
+@app.route("/history/latest", methods=["GET"])
+def get_latest_emotion():
+    user_id = request.args.get("user_id", "anonymous")
+    try:
+        from pymongo import MongoClient
+        client = MongoClient("mongodb://127.0.0.1:27017/")
+        db = client["mindsenseDB"]
+        collection = db["emotion_logs"]
+        record = collection.find_one(
+            {"user_id": user_id},
+            {"_id": 0, "emotion": 1, "timestamp": 1},
+            sort=[("timestamp", -1)]
+        )
+        if not record:
+            return jsonify({"latest": None})
+        record["timestamp"] = record["timestamp"].isoformat()
+        return jsonify({"latest": record})
+    except Exception as e:
+        print("Latest emotion error:", e)
+        return jsonify({"latest": None}), 200
 
 @app.route("/memories", methods=["POST"])
 def post_memory():

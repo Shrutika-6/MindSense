@@ -35,7 +35,7 @@ function MoodDashboard() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, []);
+  }, [userId]);
 
   const processChartData = (records) => {
     const counts = {};
@@ -84,10 +84,10 @@ function MoodDashboard() {
 
   return (
     <div className="w-full max-w-3xl mx-auto py-6 px-4 flex flex-col gap-6">
-      <Link to="/home" className="text-slate-500 hover:text-violet-600 font-bold text-sm transition flex items-center gap-1 self-start">
+      <Link to="/home" className="text-slate-500 hover:text-indigo-600 font-bold text-sm transition flex items-center gap-1 self-start">
         ← Back to Home
       </Link>
-      <h1 className="text-4xl font-extrabold bg-gradient-to-r from-violet-600 to-pink-500 bg-clip-text text-transparent text-center">
+      <h1 className="text-4xl font-extrabold bg-gradient-to-r from-indigo-600 to-emerald-500 bg-clip-text text-transparent text-center">
         Your Mood History 📊
       </h1>
       <p className="text-center text-slate-500 font-medium text-sm">
@@ -164,7 +164,7 @@ function MoodDashboard() {
                 <button
                   onClick={generateInsight}
                   disabled={loadingInsight}
-                  className="bg-gradient-to-r from-violet-500 to-pink-500 text-white font-bold px-6 py-3 rounded-xl text-sm transition hover:opacity-90 disabled:opacity-60"
+                  className="bg-gradient-to-r from-indigo-600 to-emerald-500 text-white font-extrabold px-6 py-3.5 rounded-xl text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all hover:opacity-95 disabled:opacity-60"
                 >
                   {loadingInsight ? "Analyzing your patterns..." : "✨ Generate My Insight"}
                 </button>

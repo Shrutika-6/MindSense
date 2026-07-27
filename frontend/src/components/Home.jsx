@@ -1,29 +1,57 @@
 "use client"
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import MindSenseLogo from "./MindSenseLogo"
 
-const MindSenseLogo = ({ size = 48 }) => (
-  <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#4f46e5"/>
-        <stop offset="100%" stopColor="#10b981"/>
-      </linearGradient>
-    </defs>
-    <rect width="100" height="100" rx="22" fill="url(#logoGrad)"/>
-    <ellipse cx="50" cy="48" rx="26" ry="22" fill="none" stroke="white" strokeWidth="2.5"/>
-    <ellipse cx="50" cy="48" rx="14" ry="15" fill="none" stroke="white" strokeWidth="1.5" strokeDasharray="3 2"/>
-    <polyline points="24,48 33,48 37,34 43,62 49,42 54,54 58,48 76,48" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <circle cx="28" cy="32" r="2.5" fill="white" opacity="0.7"/>
-    <circle cx="72" cy="34" r="2" fill="white" opacity="0.6"/>
-    <circle cx="70" cy="66" r="2.5" fill="white" opacity="0.7"/>
-  </svg>
-)
+const WELLNESS_QUOTES = [
+  { text: "You don't have to control your thoughts. You just have to stop letting them control you.", author: "Dan Millman" },
+  { text: "Self-compassion is simply giving ourselves the same kindness we would give to others.", author: "Kristin Neff" },
+  { text: "Feelings come and go like clouds in a windy sky. Conscious breathing is my anchor.", author: "Thich Nhat Hanh" },
+  { text: "You are worth quiet moments. You are worth space to breathe.", author: "Morgan Harper Nichols" },
+  { text: "The present moment is filled with joy and happiness. If you are attentive, you will see it.", author: "Thich Nhat Hanh" },
+  { text: "Caring for myself is not self-indulgence, it is self-preservation.", author: "Audre Lorde" },
+  { text: "Breathe in deeply to bring your mind home to your body.", author: "Thich Nhat Hanh" },
+  { text: "Almost everything will work again if you unplug it for a few minutes, including you.", author: "Anne Lamott" }
+]
 
 export default function Home() {
   const navigate = useNavigate()
   const userEmail = localStorage.getItem("userEmail") || "friend"
   const displayName = userEmail.split("@")[0]
+
+  const dateIndex = new Date().getDate() % WELLNESS_QUOTES.length
+  const dailyQuote = WELLNESS_QUOTES[dateIndex]
+
+  const [latestCheckin, setLatestCheckin] = useState(null)
+
+  useEffect(() => {
+    fetch(`http://127.0.0.1:5000/history/latest?user_id=${userEmail}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.latest) {
+          const lastTime = new Date(data.latest.timestamp)
+          const now = new Date()
+          const diffTime = Math.abs(now - lastTime)
+          const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
+          setLatestCheckin({
+            emotion: data.latest.emotion,
+            daysAgo: diffDays
+          })
+        }
+      })
+      .catch((err) => console.log("Failed to fetch latest emotion:", err))
+  }, [userEmail])
+
+  const getGreetingMessage = () => {
+    if (!latestCheckin) {
+      return "Welcome! We haven't done an emotion check-in yet. How are you feeling today?"
+    }
+    const { emotion, daysAgo } = latestCheckin
+    if (daysAgo === 0) {
+      return `Glad to see you back today! Earlier you checked in feeling ${emotion}. How are you feeling right now?`
+    }
+    return `Haven't seen you in ${daysAgo} day${daysAgo > 1 ? 's' : ''}! Last time you checked in, you were feeling ${emotion}. How are you feeling now?`
+  }
 
   return (
     <div className="w-full max-w-6xl mx-auto px-6 py-6 flex flex-col gap-6 relative select-none">
@@ -39,11 +67,10 @@ export default function Home() {
           <MindSenseLogo size={52} />
           <div>
             <h2 className="text-2xl font-black text-slate-800 leading-tight capitalize">Welcome, {displayName}!</h2>
-            <p className="text-slate-500 text-xs font-semibold mt-1">Let's nurture your mind and create space for peace today.</p>
+            <p className="text-slate-500 text-xs font-semibold mt-1.5 leading-relaxed">
+              {getGreetingMessage()}
+            </p>
           </div>
-        </div>
-        <div className="hidden md:block bg-gradient-to-r from-indigo-600 via-teal-500 to-emerald-400 text-white font-extrabold text-xs px-4 py-2 rounded-xl shadow-md">
-          🌸 MindSense AI Premium
         </div>
       </div>
 
@@ -68,7 +95,51 @@ export default function Home() {
             className="breathing-border cursor-pointer transition-transform duration-500 hover:scale-105 my-6"
           >
             <div className="w-40 h-40 rounded-full bg-white/90 flex flex-col items-center justify-center p-3 text-center shadow-inner relative overflow-hidden group">
-              <span className="text-4xl mb-1 group-hover:scale-110 transition-transform">🌿</span>
+              <div className="w-16 h-16 flex items-center justify-center mb-1 select-none relative">
+                
+                {/* Tech Scanning Sweeper Line */}
+                <div className="absolute left-2 right-2 h-0.5 bg-gradient-to-r from-transparent via-teal-400 to-transparent shadow-[0_0_8px_#2dd4bf] z-10 animate-scan pointer-events-none" />
+
+                <svg width="56" height="56" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:scale-105 transition-transform duration-500">
+                  <defs>
+                    <radialGradient id="meshGlow" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                      <stop offset="0%" stopColor="rgba(45, 212, 191, 0.18)" />
+                      <stop offset="100%" stopColor="transparent" />
+                    </radialGradient>
+                  </defs>
+
+                  {/* High-tech glow backing */}
+                  <circle cx="50" cy="50" r="42" fill="url(#meshGlow)" />
+
+                  {/* Symmetrical Human Head Outline */}
+                  <circle 
+                    cx="50" 
+                    cy="36" 
+                    r="16" 
+                    stroke="rgba(79, 70, 229, 0.75)" 
+                    strokeWidth="2.5" 
+                    fill="none" 
+                  />
+
+                  {/* Symmetrical Human Shoulders outline */}
+                  <path 
+                    d="M 24 76 C 24 60, 34 52, 50 52 C 66 52, 76 60, 76 76" 
+                    stroke="rgba(79, 70, 229, 0.75)" 
+                    strokeWidth="2.5" 
+                    strokeLinecap="round" 
+                    fill="none" 
+                  />
+
+                  {/* Target Scanner Reticle */}
+                  <circle cx="50" cy="36" r="23" stroke="rgba(20,184,166,0.15)" strokeWidth="1" strokeDasharray="3 3" />
+                  
+                  {/* Crosshair ticks */}
+                  <path d="M 50 8 V 14" stroke="rgba(20,184,166,0.4)" strokeWidth="1" />
+                  <path d="M 50 58 V 64" stroke="rgba(20,184,166,0.4)" strokeWidth="1" />
+                  <path d="M 22 36 H 28" stroke="rgba(20,184,166,0.4)" strokeWidth="1" />
+                  <path d="M 72 36 H 78" stroke="rgba(20,184,166,0.4)" strokeWidth="1" />
+                </svg>
+              </div>
               <span className="text-xs font-extrabold text-teal-600 tracking-wider uppercase">Scan Face</span>
               <span className="text-[9px] font-bold text-slate-400 mt-1">Tap to launch camera</span>
             </div>
@@ -89,7 +160,7 @@ export default function Home() {
             
             {/* Feature 1: Breathing Exercises */}
             <div 
-              onClick={() => navigate("/insights")}
+              onClick={() => navigate("/exercises")}
               className="bg-white/60 backdrop-blur-xl border border-white/80 rounded-[28px] p-6 shadow-sm flex flex-col justify-between h-48 cursor-pointer hover:-translate-y-1.5 hover:shadow-[0_15px_30px_rgba(16,185,129,0.12)] transition-all group"
             >
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-100 to-teal-200/50 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
@@ -103,7 +174,7 @@ export default function Home() {
 
             {/* Feature 2: Gratitude Journal */}
             <div 
-              onClick={() => navigate("/insights")}
+              onClick={() => navigate("/journal")}
               className="bg-white/60 backdrop-blur-xl border border-white/80 rounded-[28px] p-6 shadow-sm flex flex-col justify-between h-48 cursor-pointer hover:-translate-y-1.5 hover:shadow-[0_15px_30px_rgba(13,148,136,0.1)] transition-all group"
             >
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-100 to-teal-200/30 flex items-center justify-center text-2xl shadow-inner group-hover:scale-105 transition-transform">
@@ -151,7 +222,7 @@ export default function Home() {
             <div>
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Today's Reflection</p>
               <p className="text-slate-700 text-xs font-semibold italic mt-0.5 leading-relaxed">
-                "You don't have to control your thoughts. You just have to stop letting them control you." — Dan Millman
+                "{dailyQuote.text}" — {dailyQuote.author}
               </p>
             </div>
           </div>
