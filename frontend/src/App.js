@@ -59,7 +59,7 @@ function App() {
             {/* Click triggers confirmation overlay modal */}
             <button 
               onClick={() => setShowLogoutConfirm(true)} 
-              className="text-slate-500 hover:text-red-500 font-semibold transition text-sm cursor-pointer bg-transparent border-none outline-none"
+              className="text-slate-600 hover:text-red-500 font-bold transition text-sm cursor-pointer bg-transparent border-none outline-none p-0"
             >
               Logout
             </button>
