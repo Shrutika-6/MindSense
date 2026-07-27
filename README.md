@@ -107,12 +107,3 @@ npm install
 npm start
 ```
 *Runs on port `3000`.*
-
----
-
-## 📝 Resume Bullet Points (Recruiter Ready)
-
-*   **Full-Stack AI Architecture**: Engineered a decoupled multi-service system combining a React client, Express/Node auth server, and Python Flask ML service with real-time facial keypoint tracking.
-*   **Cognitive RAG Companion**: Developed a Retrieval-Augmented Generation (RAG) chatbot using a ChromaDB vector database and Llama LLM via Groq, providing therapy-grounded support based on active sentiment logs.
-*   **Security & Guarding**: Built robust JSON Web Token (JWT) route guards, startup background token verification endpoints, and cryptographic session management to enforce web routing security.
-*   **Micro-Animations & UI**: Implemented interactive breathing guide ring timers and virtual jar animation pipelines with floating canvas bubble lifespans to maximize user retention and wellness engagement.
