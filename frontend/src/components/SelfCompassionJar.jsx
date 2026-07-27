@@ -123,20 +123,6 @@ export default function SelfCompassionJar() {
         <div className="md:col-span-5 flex flex-col items-center justify-center">
           
           <div className="relative">
-            {/* Drawn memory bubble */}
-            {drawnMemory && (
-              <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-64 bg-gradient-to-r from-indigo-600 to-emerald-500 text-white font-semibold text-xs rounded-2xl px-4 py-3 shadow-lg z-30 animate-fade-in text-center leading-relaxed">
-                <span className="font-extrabold block text-amber-200 mb-1">Remember this moment:</span>
-                "{drawnMemory.text}"
-                <button 
-                  onClick={() => setDrawnMemory(null)}
-                  className="block mx-auto mt-2 text-[10px] underline font-bold opacity-80 hover:opacity-100"
-                >
-                  Close
-                </button>
-              </div>
-            )}
-
             {/* Custom SVG Glass Jar Container with Spheres layered inside */}
             <div className={`relative w-[260px] h-[340px] flex items-center justify-center ${shaking ? "animate-shake" : ""}`}>
               
@@ -153,6 +139,23 @@ export default function SelfCompassionJar() {
                   renderedSpheres
                 )}
               </div>
+
+              {/* Open Drawn Memory Bubble (Centered overlay inside the jar itself!) */}
+              {drawnMemory && (
+                <div className="absolute top-[48px] left-[5px] right-[5px] bottom-[5px] bg-slate-900/80 backdrop-blur-sm z-20 flex flex-col items-center justify-center p-6 text-center animate-modal-fade rounded-[48px]">
+                  <span className="text-3xl mb-2 animate-bounce">🔮</span>
+                  <p className="text-amber-300 text-[10px] font-extrabold uppercase tracking-wider mb-1">Drawn Memory</p>
+                  <p className="text-white text-xs font-semibold leading-relaxed italic px-2 max-h-[140px] overflow-y-auto">
+                    "{drawnMemory.text}"
+                  </p>
+                  <button 
+                    onClick={() => setDrawnMemory(null)}
+                    className="mt-4 bg-white/20 hover:bg-white/30 text-white font-extrabold text-[10px] uppercase px-4 py-1.5 rounded-full border border-white/40 transition cursor-pointer"
+                  >
+                    Close
+                  </button>
+                </div>
+              )}
 
               {/* Custom SVG Jar Artwork */}
               <svg width="260" height="340" viewBox="0 0 260 340" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute inset-0 z-0">

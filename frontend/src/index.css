@@ -212,4 +212,34 @@ body {
   to { opacity: 1; transform: scale(1); }
 }
 
+/* Blink animation for animated SVG face */
+.animate-blink {
+  animation: face-blink 4s infinite;
+}
+
+@keyframes face-blink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.1); }
+}
+
+/* Smile breathing animation */
+.animate-smile {
+  animation: smile-breath 3s ease-in-out infinite;
+}
+
+@keyframes smile-breath {
+  0%, 100% { transform: translateY(0) scaleX(1); }
+  50% { transform: translateY(-1px) scaleX(1.03); }
+}
+
+/* Scanning laser beam animation */
+.animate-scan {
+  animation: scan-line 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes scan-line {
+  0%, 100% { top: 12%; opacity: 0.3; }
+  50% { top: 78%; opacity: 1; }
+}
+
 
