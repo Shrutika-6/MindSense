@@ -223,7 +223,7 @@ function EmotionDetection() {
       <div className="absolute top-[40%] right-[10%] text-indigo-300/40 text-2xl animate-bounce">✧</div>
 
       {/* Back to Home Link */}
-      <Link to="/home" className="text-slate-500 hover:text-indigo-600 font-bold text-sm transition flex items-center gap-1 self-start mb-6">
+      <Link to="/home" className="text-slate-700 hover:text-indigo-600 font-extrabold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 self-start mb-6 select-none cursor-pointer hover:-translate-x-0.5">
         ← Back to Home
       </Link>
       

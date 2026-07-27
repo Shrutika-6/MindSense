@@ -84,7 +84,7 @@ function MoodDashboard() {
 
   return (
     <div className="w-full max-w-3xl mx-auto py-6 px-4 flex flex-col gap-6">
-      <Link to="/home" className="text-slate-500 hover:text-indigo-600 font-bold text-sm transition flex items-center gap-1 self-start">
+      <Link to="/home" className="text-slate-700 hover:text-indigo-600 font-extrabold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 self-start select-none cursor-pointer hover:-translate-x-0.5">
         ← Back to Home
       </Link>
       <h1 className="text-4xl font-extrabold bg-gradient-to-r from-indigo-600 to-emerald-500 bg-clip-text text-transparent text-center">

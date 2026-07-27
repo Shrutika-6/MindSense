@@ -54,7 +54,7 @@ export default function ReflectionJournal() {
     <div className="w-full max-w-4xl mx-auto py-6 px-4 flex flex-col gap-6 relative select-none">
       
       {/* Back Button */}
-      <Link to="/home" className="text-slate-500 hover:text-indigo-600 font-bold text-sm transition flex items-center gap-1 self-start">
+      <Link to="/home" className="text-slate-700 hover:text-indigo-600 font-extrabold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 self-start select-none cursor-pointer hover:-translate-x-0.5">
         ← Back to Home
       </Link>
 
