@@ -5,6 +5,16 @@ import StartButton from "./StartButton";
 import ResultSection from "./ResultSection";
 import { useNavigate, Link } from "react-router-dom";
 
+const AFFIRMATIONS = [
+  "I am in control of my reactions, and I choose peace.",
+  "My emotions are valid, but they do not define me.",
+  "I give myself permission to pause, breathe, and reset.",
+  "I choose to be kind to myself today. I deserve peace.",
+  "I am doing the best I can, and that is enough.",
+  "I am resilient, and I can handle whatever comes my way.",
+  "I choose to focus on what I can control and let go of the rest."
+];
+
 function EmotionDetection() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -30,6 +40,10 @@ function EmotionDetection() {
   const [chatMessages, setChatMessages] = useState([]);
   const [chatInput, setChatInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+
+  // Dynamic stats & affirmation variables
+  const [stats, setStats] = useState({ count: 0, latest: null });
+  const [currentAffirmation] = useState(() => AFFIRMATIONS[Math.floor(Math.random() * AFFIRMATIONS.length)]);
 
   const userId = localStorage.getItem("userEmail") || "anonymous";
 
@@ -89,6 +103,23 @@ function EmotionDetection() {
       chatEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [chatMessages, isTyping]);
+
+  // Load user scan activity stats on mount
+  useEffect(() => {
+    if (!hasStarted) {
+      Promise.all([
+        fetch(`http://127.0.0.1:5000/history?user_id=${userId}&days=7`).then(res => res.json()),
+        fetch(`http://127.0.0.1:5000/history/latest?user_id=${userId}`).then(res => res.json())
+      ])
+        .then(([historyData, latestData]) => {
+          setStats({
+            count: historyData.history?.length || 0,
+            latest: latestData.latest || null
+          });
+        })
+        .catch((err) => console.error("Error loading stats:", err));
+    }
+  }, [userId, hasStarted]);
 
   const captureAndSendFrame = () => {
     const video = videoRef.current;
@@ -335,20 +366,44 @@ function EmotionDetection() {
                 <div>
                   <h3 className="text-xl font-black text-slate-800 leading-tight">AI Expression Mapping 🧠</h3>
                   <p className="text-slate-500 text-xs font-semibold mt-1 leading-relaxed">
-                    By launching a scan, MindSense utilizes a custom convolutional neural network (CNN) model to capture micro-expressions, helping identify your primary emotional state.
+                    Launch a scan to analyze your facial geometry coordinates and connect with the MindSense wellness companion.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
-                  <div className="bg-white/40 border border-slate-200/50 rounded-2xl p-4">
-                    <span className="text-2xl">📸</span>
-                    <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider mt-2 mb-1">Webcam Mapping</h4>
-                    <p className="text-slate-500 text-[11px] font-medium leading-relaxed">Runs completely in-browser to identify key coordinates of eyes, brows, and lips.</p>
+                  {/* Box 1: Dynamic Daily Affirmation */}
+                  <div className="bg-white/45 backdrop-blur-sm border border-slate-200/40 rounded-2xl p-4 flex flex-col justify-between shadow-[0_2px_12px_rgba(0,0,0,0.01)] hover:-translate-y-0.5 transition-all">
+                    <div>
+                      <span className="text-xl">🌸</span>
+                      <h4 className="text-[11px] font-black text-slate-800 uppercase tracking-wider mt-2 mb-1">Daily Affirmation</h4>
+                      <p className="text-slate-600 text-xs font-semibold italic leading-relaxed">
+                        "{currentAffirmation}"
+                      </p>
+                    </div>
                   </div>
-                  <div className="bg-white/40 border border-slate-200/50 rounded-2xl p-4">
-                    <span className="text-2xl">🌿</span>
-                    <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider mt-2 mb-1">AI Coping Companion</h4>
-                    <p className="text-slate-500 text-[11px] font-medium leading-relaxed">Integrates Llama's cognitive techniques to guide you through reflections corresponding to your state.</p>
+
+                  {/* Box 2: Quick Scan Stats */}
+                  <div className="bg-white/45 backdrop-blur-sm border border-slate-200/40 rounded-2xl p-4 flex flex-col justify-between shadow-[0_2px_12px_rgba(0,0,0,0.01)] hover:-translate-y-0.5 transition-all">
+                    <div>
+                      <span className="text-xl">📊</span>
+                      <h4 className="text-[11px] font-black text-slate-800 uppercase tracking-wider mt-2 mb-1">Your Scan Activity</h4>
+                      <div className="flex flex-col gap-2 mt-3">
+                        <div className="flex justify-between items-center text-[11px] font-bold text-slate-600">
+                          <span>Weekly Scans:</span>
+                          <span className="text-indigo-600 font-extrabold">{stats.count} logged</span>
+                        </div>
+                        <div className="flex justify-between items-center text-[11px] font-bold text-slate-600">
+                          <span>Last State:</span>
+                          {stats.latest ? (
+                            <span className={`px-2 py-0.5 rounded-full text-[9px] font-black border ${emotionBadges[stats.latest.emotion]?.gradient || "bg-slate-100"}`}>
+                              {emotionBadges[stats.latest.emotion]?.emoji} {stats.latest.emotion}
+                            </span>
+                          ) : (
+                            <span className="text-slate-400">None yet</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
