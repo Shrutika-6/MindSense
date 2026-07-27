@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route, Link, useLocation, Navigate, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./App.css";
 
 import Signup from "./components/Signup";
@@ -15,20 +16,70 @@ import MindSenseLogo from "./components/MindSenseLogo";
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
-  const isAuthenticated = !!localStorage.getItem("authToken");
 
+  const [isValidating, setIsValidating] = useState(true);
+  const [isTokenValid, setIsTokenValid] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   // Determine if the current route is one of the auth pages
   const isAuthPage = ["/", "/signup", "/login"].includes(location.pathname);
 
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      setIsTokenValid(false);
+      setIsValidating(false);
+      return;
+    }
+
+    // Verify token validity with Express auth_service backend
+    axios.get("http://localhost:3001/verify", {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then((res) => {
+        if (res.data && res.data.status === "Success") {
+          setIsTokenValid(true);
+        } else {
+          // Token is invalid/expired
+          localStorage.removeItem("authToken");
+          localStorage.removeItem("userEmail");
+          setIsTokenValid(false);
+        }
+        setIsValidating(false);
+      })
+      .catch((err) => {
+        console.error("Session verification error:", err);
+        // Fallback: If network is offline but local token exists, allow offline usage to prevent blocking
+        setIsTokenValid(true);
+        setIsValidating(false);
+      });
+  }, [location.pathname]);
+
+  // Loading indicator overlay during active token verification
+  if (isValidating) {
+    return (
+      <div className="relative min-h-screen flex items-center justify-center">
+        <div className="lava-background">
+          <div className="lava-blob blob-lavender"></div>
+          <div className="lava-blob blob-pink"></div>
+          <div className="lava-blob blob-mint"></div>
+          <div className="lava-blob blob-peach"></div>
+        </div>
+        <div className="bg-white/80 backdrop-blur-xl border border-white/80 rounded-[32px] p-8 max-w-xs text-center shadow-lg flex flex-col items-center gap-4">
+          <div className="w-10 h-10 border-4 border-slate-200 border-t-indigo-600 rounded-full animate-spin" />
+          <p className="text-slate-500 font-extrabold text-[10px] uppercase tracking-wider">Verifying Session...</p>
+        </div>
+      </div>
+    );
+  }
+
   // 1. Route Guard: Redirect unauthorized users to login
-  if (!isAuthenticated && !isAuthPage) {
+  if (!isTokenValid && !isAuthPage) {
     return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
   // 2. Route Guard: Redirect logged-in users away from signup/login to home
-  if (isAuthenticated && isAuthPage) {
+  if (isTokenValid && isAuthPage) {
     return <Navigate to="/home" replace />;
   }
 
