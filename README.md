@@ -55,11 +55,11 @@ graph TD
 
 ## 📸 Screenshots
 
-### AI Expression Mapping & Camera Alignment Dashboard
-![Dashboard](./screenshots/media__1785136179350.png)
+### Interactive Mental Wellness Dashboard (Home)
+![Home Dashboard](./screenshots/home_dashboard.png)
 
-### User-Friendly Inline Validation Forms
-![Signup Form](./screenshots/media__1785135270756.png)
+### Real-Time Facial Expression Mapping (Camera Scanner)
+![Emotion Scanner](./screenshots/emotion_scanner.png)
 
 ---
 
