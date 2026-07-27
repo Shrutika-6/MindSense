@@ -15,11 +15,15 @@ export default function Login() {
     axios.post("http://localhost:3001/login", { email, password })
       .then(result => {
         console.log(result)
-        if (result.data === "Success") {
-          localStorage.setItem("userEmail", email) // Save email for profile dashboard tracking
+        const data = result.data;
+        if (data && (data.status === "Success" || data === "Success")) {
+          const token = data.token || "";
+          const emailVal = data.email || email;
+          localStorage.setItem("authToken", token) // Save signed JWT token
+          localStorage.setItem("userEmail", emailVal) // Save email for profile dashboard tracking
           navigate("/home")
         } else {
-          alert(result.data) // Display error like "Incorrect password"
+          alert(data.status || data) // Display error like "Incorrect password"
           setLoading(false)
         }
       })

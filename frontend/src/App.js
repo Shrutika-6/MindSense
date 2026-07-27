@@ -15,7 +15,7 @@ import MindSenseLogo from "./components/MindSenseLogo";
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
-  const isAuthenticated = !!localStorage.getItem("userEmail");
+  const isAuthenticated = !!localStorage.getItem("authToken");
 
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
@@ -111,6 +111,7 @@ function App() {
               <button
                 onClick={() => {
                   setShowLogoutConfirm(false);
+                  localStorage.removeItem("authToken");
                   localStorage.removeItem("userEmail");
                   navigate("/login");
                 }}

@@ -1,37 +1,63 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 const EmotionModel = require('./models/Emotion'); 
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+const JWT_SECRET = "mindsense_super_secret_key_2026_token";
+
 mongoose.connect("mongodb://127.0.0.1:27017/emotionDB"); 
 
+// User login endpoint generating a signed JWT token
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
   EmotionModel.findOne({ email: email }) 
   .then(user => {
     if (user) {
-     if (user.password === password){
-      res.json("Success")
-     } else {
-      res.json("Incorrect password")
-     }  
-  } else {
-    res.json("User not found");
+      if (user.password === password){
+        const token = jwt.sign({ email: user.email }, JWT_SECRET, { expiresIn: '24h' });
+        res.json({ status: "Success", token: token, email: user.email });
+      } else {
+        res.json({ status: "Incorrect password" });
+      }  
+    } else {
+      res.json({ status: "User not found" });
+    }
+  })
+  .catch(err => res.status(500).json({ error: err.message }));
+});     
+
+// Route verification endpoint to validate JWT token on client requests
+app.get('/verify', (req, res) => {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) {
+    return res.status(401).json({ status: "Unauthorized", message: "Token missing" });
   }
-})
-})     
 
+  const token = authHeader.split(' ')[1];
+  if (!token) {
+    return res.status(401).json({ status: "Unauthorized", message: "Token format invalid" });
+  }
 
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ status: "Unauthorized", message: "Token invalid or expired" });
+    }
+    res.json({ status: "Success", email: decoded.email });
+  });
+});
+
+// Signup user creation endpoint
 app.post('/user', (req, res) => {
- EmotionModel.create(req.body)
+  EmotionModel.create(req.body)
     .then(emotionDB => res.json(emotionDB))
     .catch(err => res.json(err));
 });
 
 app.listen(3001, () => {
-  console.log('Server is running' )
+  console.log('Server is running' );
 });
