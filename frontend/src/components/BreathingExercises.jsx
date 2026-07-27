@@ -224,9 +224,10 @@ export default function BreathingExercises() {
                   {exercise.description}
                 </p>
 
+
                 {isOpen && (
                   <div className="mt-4 pt-4 border-t border-slate-200/50 animate-scale-up">
-                    {isGuideActive ? (
+                    {exercise.id === 1 && isGuideActive ? (
                       <BreathingGuide 
                         onStop={() => setActiveBreathGuide(null)} 
                       />
@@ -243,15 +244,17 @@ export default function BreathingExercises() {
                             ))}
                           </ul>
                         </div>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation(); // Prevent card collapse
-                            setActiveBreathGuide(exercise.id);
-                          }}
-                          className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-emerald-500 text-white font-extrabold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all cursor-pointer text-center"
-                        >
-                          ✨ Start Interactive Breath Guide
-                        </button>
+                        {exercise.id === 1 && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation(); // Prevent card collapse
+                              setActiveBreathGuide(exercise.id);
+                            }}
+                            className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-emerald-500 text-white font-extrabold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all cursor-pointer text-center"
+                          >
+                            ✨ Start Interactive Breath Guide
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>
