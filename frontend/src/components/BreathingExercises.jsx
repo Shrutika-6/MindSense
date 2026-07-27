@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const EXERCISES = [
@@ -90,8 +90,93 @@ const EXERCISES = [
   }
 ];
 
+// Interactive breathing coach sub-component
+function BreathingGuide({ onStop }) {
+  const [phase, setPhase] = useState(0); // 0 = Inhale, 1 = Hold, 2 = Exhale
+  const [secondsLeft, setSecondsLeft] = useState(4); // Start with Inhale (4s)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSecondsLeft((prev) => {
+        if (prev <= 1) {
+          setPhase((currentPhase) => (currentPhase + 1) % 3);
+          return 0; // Will trigger the duration update in the next hook
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Update timer durations based on active breathing phase
+  useEffect(() => {
+    if (secondsLeft === 0) {
+      if (phase === 0) setSecondsLeft(4); // Inhale: 4s
+      else if (phase === 1) setSecondsLeft(4); // Hold: 4s
+      else if (phase === 2) setSecondsLeft(6); // Exhale: 6s
+    }
+  }, [phase, secondsLeft]);
+
+  const phases = [
+    { label: "Inhale", desc: "Breathe in slowly through your nose", color: "from-indigo-500/20 to-teal-400/20 border-indigo-400/50 shadow-[0_0_20px_rgba(129,140,248,0.35)] scale-[1.12]", emoji: "🌬️" },
+    { label: "Hold", desc: "Hold your breath gently", color: "from-teal-500/20 to-emerald-400/20 border-teal-400/50 shadow-[0_0_25px_rgba(45,212,191,0.45)] scale-[1.16]", emoji: "🧘‍♀️" },
+    { label: "Exhale", desc: "Exhale slowly through your mouth", color: "from-slate-350/10 to-indigo-300/10 border-slate-300/40 shadow-inner scale-[0.88]", emoji: "🍃" }
+  ];
+
+  const current = phases[phase];
+
+  return (
+    <div className="flex flex-col items-center gap-4 py-4 animate-scale-up text-center w-full">
+      {/* Guided pulsing ring */}
+      <div className="w-36 h-36 flex items-center justify-center relative my-3">
+        <div 
+          className={`absolute inset-0 rounded-full bg-gradient-to-tr transition-all duration-1000 border-2 ${current.color}`}
+        />
+        <div className="z-10 flex flex-col items-center justify-center select-none">
+          <span className="text-3xl mb-1 animate-pulse">{current.emoji}</span>
+          <span className="text-[11px] font-black text-slate-800 uppercase tracking-widest leading-none mb-1">
+            {current.label}
+          </span>
+          <span className="text-lg font-black text-indigo-600 leading-none">
+            {secondsLeft}s
+          </span>
+        </div>
+      </div>
+
+      <div className="px-4">
+        <p className="text-slate-500 text-xs font-semibold leading-relaxed">
+          {current.desc}
+        </p>
+      </div>
+
+      <button
+        onClick={(e) => {
+          e.stopPropagation(); // Prevent card collapse
+          onStop();
+        }}
+        className="mt-2 py-2 px-6 rounded-full border border-slate-200 hover:bg-slate-50 text-slate-500 font-extrabold text-[9px] uppercase tracking-wider transition cursor-pointer"
+      >
+        🛑 Stop Guide
+      </button>
+    </div>
+  );
+}
+
 export default function BreathingExercises() {
   const [activeExercise, setActiveExercise] = useState(null);
+  const [activeBreathGuide, setActiveBreathGuide] = useState(null);
+
+  // If card collapses, stop active breathing guide session
+  const handleCardToggle = (exerciseId) => {
+    if (activeExercise === exerciseId) {
+      setActiveExercise(null);
+      setActiveBreathGuide(null);
+    } else {
+      setActiveExercise(exerciseId);
+      setActiveBreathGuide(null);
+    }
+  };
 
   return (
     <div className="w-full max-w-4xl mx-auto py-6 px-4 flex flex-col gap-6 relative select-none">
@@ -115,10 +200,12 @@ export default function BreathingExercises() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4 animate-scale-up">
         {EXERCISES.map((exercise) => {
           const isOpen = activeExercise === exercise.id;
+          const isGuideActive = activeBreathGuide === exercise.id;
+          
           return (
             <div
               key={exercise.id}
-              onClick={() => setActiveExercise(isOpen ? null : exercise.id)}
+              onClick={() => handleCardToggle(exercise.id)}
               className="bg-white/60 backdrop-blur-xl border border-white/80 rounded-[28px] p-6 shadow-sm flex flex-col justify-between cursor-pointer hover:-translate-y-1 hover:shadow-md transition-all group"
             >
               <div>
@@ -139,15 +226,34 @@ export default function BreathingExercises() {
 
                 {isOpen && (
                   <div className="mt-4 pt-4 border-t border-slate-200/50 animate-scale-up">
-                    <p className="text-xs font-black text-indigo-600 uppercase tracking-wider mb-2">How to practice:</p>
-                    <ul className="flex flex-col gap-2">
-                      {exercise.steps.map((step, idx) => (
-                        <li key={idx} className="flex gap-2 items-start text-xs font-semibold text-slate-600 leading-relaxed">
-                          <span className="text-emerald-500 mt-0.5">•</span>
-                          <span>{step}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    {isGuideActive ? (
+                      <BreathingGuide 
+                        onStop={() => setActiveBreathGuide(null)} 
+                      />
+                    ) : (
+                      <div className="flex flex-col gap-4">
+                        <div>
+                          <p className="text-xs font-black text-indigo-600 uppercase tracking-wider mb-2">How to practice:</p>
+                          <ul className="flex flex-col gap-2">
+                            {exercise.steps.map((step, idx) => (
+                              <li key={idx} className="flex gap-2 items-start text-xs font-semibold text-slate-600 leading-relaxed">
+                                <span className="text-emerald-500 mt-0.5">•</span>
+                                <span>{step}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent card collapse
+                            setActiveBreathGuide(exercise.id);
+                          }}
+                          className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-emerald-500 text-white font-extrabold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all cursor-pointer text-center"
+                        >
+                          ✨ Start Interactive Breath Guide
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
