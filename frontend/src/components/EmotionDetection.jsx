@@ -97,6 +97,7 @@ function EmotionDetection() {
     return () => {
       if (interval) clearInterval(interval);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDetecting]);
 
   useEffect(() => {

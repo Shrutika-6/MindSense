@@ -18,6 +18,7 @@ export default function SelfCompassionJar() {
 
   useEffect(() => {
     fetchMemories()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const fetchMemories = () => {
