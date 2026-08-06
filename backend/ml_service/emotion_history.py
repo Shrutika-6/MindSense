@@ -1,7 +1,8 @@
+import os
 from pymongo import MongoClient
 from datetime import datetime
-
-client = MongoClient("mongodb://127.0.0.1:27017/")
+mongo_uri = os.environ.get("MONGODB_URI", "mongodb://127.0.0.1:27017/")
+client = MongoClient(mongo_uri)
 db = client["mindsenseDB"]
 collection = db["emotion_logs"]
 
