@@ -94,24 +94,24 @@ function App() {
       </div>
 
       {!isAuthPage && (
-        <nav className="backdrop-blur-md bg-white/40 border-b border-white/60 sticky top-0 z-50 px-8 py-3.5 flex justify-between items-center shadow-[0_4px_30px_rgba(0,0,0,0.02)]">
+        <nav className="backdrop-blur-md bg-white/40 border-b border-white/60 sticky top-0 z-50 px-4 md:px-8 py-3 flex flex-col md:flex-row justify-between items-center gap-4 shadow-[0_4px_30px_rgba(0,0,0,0.02)]">
           <Link to="/home" className="text-2xl font-extrabold flex items-center gap-2 hover:opacity-90 transition">
             <MindSenseLogo size={32} />
             <span className="bg-gradient-to-r from-indigo-600 to-emerald-500 bg-clip-text text-transparent">
               MindSense
             </span>
           </Link>
-          <div className="flex gap-8 items-center">
-            <Link to="/home" className="text-slate-600 hover:text-indigo-600 font-bold transition text-sm">Home</Link>
-            <Link to="/emotion-detection" className="text-slate-600 hover:text-indigo-600 font-bold transition text-sm">Emotion Scan</Link>
-            <Link to="/exercises" className="text-slate-600 hover:text-indigo-600 font-bold transition text-sm">Exercises</Link>
-            <Link to="/journal" className="text-slate-600 hover:text-indigo-600 font-bold transition text-sm">Journal</Link>
-            <Link to="/jar" className="text-slate-600 hover:text-indigo-600 font-bold transition text-sm">Joy Jar</Link>
-            <Link to="/dashboard" className="text-slate-600 hover:text-indigo-600 font-bold transition text-sm">Mood History</Link>
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 md:gap-x-8 items-center text-center">
+            <Link to="/home" className="text-slate-600 hover:text-indigo-600 font-bold transition text-xs md:text-sm">Home</Link>
+            <Link to="/emotion-detection" className="text-slate-600 hover:text-indigo-600 font-bold transition text-xs md:text-sm">Emotion Scan</Link>
+            <Link to="/exercises" className="text-slate-600 hover:text-indigo-600 font-bold transition text-xs md:text-sm">Exercises</Link>
+            <Link to="/journal" className="text-slate-600 hover:text-indigo-600 font-bold transition text-xs md:text-sm">Journal</Link>
+            <Link to="/jar" className="text-slate-600 hover:text-indigo-600 font-bold transition text-xs md:text-sm">Joy Jar</Link>
+            <Link to="/dashboard" className="text-slate-600 hover:text-indigo-600 font-bold transition text-xs md:text-sm">Mood History</Link>
             {/* Click triggers confirmation overlay modal */}
             <button 
               onClick={() => setShowLogoutConfirm(true)} 
-              className="text-slate-600 hover:text-red-500 font-bold transition text-sm cursor-pointer bg-transparent border-none outline-none p-0"
+              className="text-slate-600 hover:text-red-500 font-bold transition text-xs md:text-sm cursor-pointer bg-transparent border-none outline-none p-0"
             >
               Logout
             </button>
