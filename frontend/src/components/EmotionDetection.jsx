@@ -84,14 +84,7 @@ function EmotionDetection() {
     if (isDetecting) {
       interval = setInterval(() => {
         captureAndSendFrame();
-        setDetectionTime((prev) => {
-          const newTime = prev + 1;
-          if (newTime >= 10) {
-            finishDetection();
-            return 10;
-          }
-          return newTime;
-        });
+        setDetectionTime((prev) => prev + 1);
       }, 1000);
     }
     return () => {
@@ -99,6 +92,13 @@ function EmotionDetection() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDetecting]);
+
+  useEffect(() => {
+    if (detectionTime >= 10 && isDetecting) {
+      finishDetection();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [detectionTime, isDetecting]);
 
   useEffect(() => {
     if (chatEndRef.current) {
