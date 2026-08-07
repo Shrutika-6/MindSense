@@ -35,10 +35,10 @@ export default function Login() {
   }
 
   return (
-    <div className="flex h-screen w-full overflow-hidden">
+    <div className="flex flex-col lg:flex-row min-h-screen lg:h-screen w-full overflow-y-auto lg:overflow-hidden bg-slate-50/50">
 
       {/* LEFT SIDE — Branding */}
-      <div className="w-1/2 flex flex-col justify-center px-16 py-6 gap-4">
+      <div className="w-full lg:w-1/2 flex flex-col justify-center px-6 md:px-16 py-8 lg:py-6 gap-4">
 
         {/* Logo + name */}
         <div className="flex items-center gap-3">
@@ -102,7 +102,7 @@ export default function Login() {
       </div>
 
       {/* RIGHT SIDE — Form */}
-      <div className="w-1/2 flex items-center justify-center px-12 py-6">
+      <div className="w-full lg:w-1/2 flex items-center justify-center px-6 md:px-12 py-8 lg:py-6">
         <div className="relative w-full max-w-md">
 
           {/* Glow */}
