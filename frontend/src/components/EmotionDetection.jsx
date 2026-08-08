@@ -33,6 +33,7 @@ function EmotionDetection() {
     neutral: 0,
   });
   const emotionCountsRef = useRef(emotionCounts);
+  const hasFinishedRef = useRef(false);
 
   const [detectionTime, setDetectionTime] = useState(0);
   const [isDetecting, setIsDetecting] = useState(false);
@@ -94,7 +95,8 @@ function EmotionDetection() {
   }, [isDetecting]);
 
   useEffect(() => {
-    if (detectionTime >= 10 && isDetecting) {
+    if (detectionTime >= 10 && isDetecting && !hasFinishedRef.current) {
+      hasFinishedRef.current = true;
       finishDetection();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -207,6 +209,7 @@ function EmotionDetection() {
     setCurrentEmotion("Detecting...");
     setStableEmotion(null);
     setChatMessages([]);
+    hasFinishedRef.current = false;
   };
 
   const navigate = useNavigate();
